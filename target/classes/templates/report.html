@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Report</title>
+</head>
+<body>
+    <h1>Employee Report</h1>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Department</th>
+        </tr>
+        <tr th:each="row : ${rows}">
+            <td th:text="${row.name}">Name</td>
+            <td th:text="${row.age}">Age</td>
+            <td th:text="${row.department}">Department</td>
+        </tr>
+    </table>
+</body>
+</html>
