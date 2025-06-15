@@ -6,6 +6,13 @@
 </head>
 <body>
     <h1>Employee Report</h1>
+    <form method="get" action="/report">
+        <label for="department">Filter by Department:</label>
+        <input type="text" id="department" name="department" th:value="${selectedDepartment}" />
+        <button type="submit">Filter</button>
+        <a href="/report">Reset</a>
+        <a href="/report/export">Export CSV</a>
+    </form>
     <table border="1">
         <tr>
             <th>Name</th>
