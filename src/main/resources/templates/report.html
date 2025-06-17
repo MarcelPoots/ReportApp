@@ -16,18 +16,14 @@
     </form>
     <table>
         <thead>
-            <tr>
-                <th>Name &#x25B2;</th>
-                <th>Age</th>
-                <th>Department</th>
-            </tr>
+        <tr th:if="${rows.size() > 0}">
+            <th th:each="header : ${rows[0].keySet()}" th:text="${header}"></th>
+        </tr>
         </thead>
         <tbody>
-            <tr th:each="row : ${rows}">
-                <td th:text="${row.name}">Name</td>
-                <td th:text="${row.age}">Age</td>
-                <td th:text="${row.department}">Department</td>
-            </tr>
+        <tr th:each="row : ${rows}">
+            <td th:each="cell : ${row.values()}" th:text="${cell}"></td>
+        </tr>
         </tbody>
     </table>
 </body>
