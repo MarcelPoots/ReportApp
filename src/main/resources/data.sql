@@ -1,3 +1,14 @@
+-- Create a sequence
+CREATE SEQUENCE my_sequence START WITH 1;
+
+CREATE TABLE report_row (
+    id INT NOT NULL default NEXTVAL('my_sequence') ,
+    name VARCHAR(50) NOT NULL,
+    age INT NOT NULL,
+    department VARCHAR(50) NOT NULL
+);
+
+
 INSERT INTO report_row (name, age, department) VALUES ('Alice', 30, 'Engineering');
 INSERT INTO report_row (name, age, department) VALUES ('Bob', 25, 'Marketing');
 INSERT INTO report_row (name, age, department) VALUES ('Charlie', 35, 'Finance');

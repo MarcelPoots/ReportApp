@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
 </head>
 <body>
-    <h1>Employee Report</h1>
+    <h1 th:text="${report.getReportName()}"></h1>
     <form method="get" action="/report">
         <label for="department">Filter by Department:</label>
         <input type="text" id="department" name="department" th:value="${selectedDepartment}" />
@@ -16,12 +16,12 @@
     </form>
     <table>
         <thead>
-        <tr th:if="${rows.size() > 0}">
-            <th th:each="header : ${rows[0].keySet()}" th:text="${header}"></th>
+        <tr th:if="${report.getRows().size() > 0}">
+            <th th:each="header : ${report.getRows()[0].keySet()}" th:text="${header}"></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="row : ${rows}">
+        <tr th:each="row : ${report.getRows()}">
             <td th:each="cell : ${row.values()}" th:text="${cell}"></td>
         </tr>
         </tbody>

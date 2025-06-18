@@ -1,5 +1,7 @@
 package com.example.report.controller;
 
+import com.example.report.base.Report;
+import com.example.report.domain.EmployeeReport;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,9 +13,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -30,9 +30,10 @@ public class ReportController {
     @GetMapping("/report")
     public String showReport(Model model,
                              @RequestParam(name = "department", required = false) String department) {
-        List<Map<String, Object>> rowList = new ArrayList<>();
-        String sql = "SELECT id, name, age, department FROM report_row";
-        if (department != null && !department.isEmpty()) {
+        Report report = new EmployeeReport();
+
+        String sql = "SELECT " + report.getSelect() + " FROM report_row";
+        if (department != null && !department.isEmpty() && sql.contains("department")) {
             sql += " WHERE department = ?";
         }
 
@@ -51,30 +52,34 @@ public class ReportController {
                 Map<String, Object> rowMap = new LinkedHashMap<>();
                 for (int i = 1; i <= columnCount; i++) {
                     String columnName = meta.getColumnName(i);
-                    System.err.println( meta.getColumnClassName(i));
                     Object columnValue = rs.getObject(i);
                     rowMap.put(columnName, columnValue);
                 }
-                rowList.add(rowMap);
+                report.getRows().add(rowMap);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        model.addAttribute("rows", rowList);
+        model.addAttribute("report", report);
         return "report";
-
     }
 
     @GetMapping("/report/export")
-    public void exportCsv(HttpServletResponse response) throws IOException {
+    public void exportCsv(@RequestParam(name = "department", required = false) String department,
+                          HttpServletResponse response) throws IOException {
         response.setContentType("text/csv");
         response.setHeader("Content-Disposition", "attachment; filename=report.csv");
+        Report report = new EmployeeReport();
 
+        String sql = "SELECT " + report.getSelect() + " FROM report_row";
+        if (department != null && !department.isEmpty() && sql.contains("department")) {
+            sql += " WHERE department = ?";
+        }
         try (
                 Connection conn = dataSource.getConnection();
-                PreparedStatement stmt = conn.prepareStatement("SELECT id, name, age, department FROM report_row");
+                PreparedStatement stmt = conn.prepareStatement(sql);
                 ResultSet rs = stmt.executeQuery();
                 PrintWriter writer = response.getWriter()
         ) {
