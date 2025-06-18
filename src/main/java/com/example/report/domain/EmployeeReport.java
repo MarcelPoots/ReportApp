@@ -20,7 +20,7 @@ public class EmployeeReport implements Report {
     }
 
     @Override
-    public List<Map<String, Object>> getRows() {
+    public List<Map<String, Object>> getRowList() {
         return rowList;
     }
 

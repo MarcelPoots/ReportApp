@@ -16,13 +16,13 @@
     </form>
     <table>
         <thead>
-        <tr th:if="${report.getRows().size() > 0}">
-            <th th:each="header : ${report.getRows()[0].keySet()}" th:text="${header}"></th>
+        <tr th:if="${report.getRowList().size() > 0}">
+            <th th:each="columnName : ${report.getRowList()[0].keySet()}" th:text="${columnName}"></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="row : ${report.getRows()}">
-            <td th:each="cell : ${row.values()}" th:text="${cell}"></td>
+        <tr th:each="row : ${report.getRowList()}">
+            <td th:each="value : ${row.values()}" th:text="${value}"></td>
         </tr>
         </tbody>
     </table>

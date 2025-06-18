@@ -3,6 +3,8 @@ package com.example.report.controller;
 import com.example.report.base.Report;
 import com.example.report.domain.EmployeeReport;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import java.util.Map;
 @Controller
 public class ReportController {
 
+    private static final Logger LOGGER = LogManager.getLogger(ReportController.class);
 
     @Autowired
     private DataSource dataSource;
@@ -55,11 +58,11 @@ public class ReportController {
                     Object columnValue = rs.getObject(i);
                     rowMap.put(columnName, columnValue);
                 }
-                report.getRows().add(rowMap);
+                report.getRowList().add(rowMap);
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Problem loading report",e);
         }
 
         model.addAttribute("report", report);

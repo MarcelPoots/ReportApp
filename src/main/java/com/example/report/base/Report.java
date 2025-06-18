@@ -7,7 +7,7 @@ public interface Report {
 
     String getReportName();
 
-    List<Map<String, Object>> getRows();
+    List<Map<String, Object>> getRowList();
 
     /**
      * @return String with set of fields that can be used in select query
