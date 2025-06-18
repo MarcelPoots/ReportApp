@@ -77,15 +77,20 @@ public class ReportController {
         Report report = new EmployeeReport();
 
         String sql = "SELECT " + report.getSelect() + " FROM " + report.getTableName();
-        if (department != null && !department.isEmpty() && sql.contains("department")) {
+        if (department != null && !department.isEmpty() && sql.toLowerCase().contains("department")) {
             sql += " WHERE department = ?";
         }
         try (
                 Connection conn = dataSource.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery();
-                PrintWriter writer = response.getWriter()
         ) {
+
+            if (department != null && !department.isEmpty()) {
+                stmt.setString(1, department);
+            }
+            ResultSet rs = stmt.executeQuery();
+            PrintWriter writer = response.getWriter();
+
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
 

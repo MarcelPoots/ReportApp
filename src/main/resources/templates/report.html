@@ -7,13 +7,17 @@
 </head>
 <body>
     <h1 th:text="${report.getReportName()}"></h1>
-    <form method="get" action="/report">
+    <form method="get" th:action="@{/report}" style="margin-bottom: 1em;">
         <label for="department">Filter by Department:</label>
-        <input type="text" id="department" name="department" th:value="${selectedDepartment}" />
+        <input type="text" id="department" name="department" th:value="${param.department}">
         <button type="submit">Filter</button>
-        <a href="/report">Reset</a>
-        <a href="/report/export">Export CSV</a>
     </form>
+
+    <!-- Export to CSV button -->
+    <a th:href="@{'/report/export'(department=${param.department})}">
+        <button>Export CSV</button>
+    </a>
+
     <table>
         <thead>
         <tr th:if="${report.getRowList().size() > 0}">
