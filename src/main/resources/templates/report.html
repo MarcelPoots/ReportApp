@@ -17,7 +17,7 @@
     <table>
         <thead>
         <tr th:if="${report.getRowList().size() > 0}">
-            <th th:each="columnName : ${report.getRowList()[0].keySet()}" th:text="${columnName}"></th>
+            <th th:each="columnName : ${report.getColumNames()}" th:text="${columnName}"></th>
         </tr>
         </thead>
         <tbody>

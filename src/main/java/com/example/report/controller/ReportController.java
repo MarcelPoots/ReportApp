@@ -35,8 +35,8 @@ public class ReportController {
                              @RequestParam(name = "department", required = false) String department) {
         Report report = new EmployeeReport();
 
-        String sql = "SELECT " + report.getSelect() + " FROM report_row";
-        if (department != null && !department.isEmpty() && sql.contains("department")) {
+        String sql = "SELECT " + report.getSelect() + " FROM " + report.getTableName();
+        if (department != null && !department.isEmpty() && sql.toLowerCase().contains("department")) {
             sql += " WHERE department = ?";
         }
 
@@ -76,7 +76,7 @@ public class ReportController {
         response.setHeader("Content-Disposition", "attachment; filename=report.csv");
         Report report = new EmployeeReport();
 
-        String sql = "SELECT " + report.getSelect() + " FROM report_row";
+        String sql = "SELECT " + report.getSelect() + " FROM " + report.getTableName();
         if (department != null && !department.isEmpty() && sql.contains("department")) {
             sql += " WHERE department = ?";
         }

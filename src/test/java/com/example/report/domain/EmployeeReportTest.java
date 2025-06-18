@@ -17,4 +17,11 @@ class EmployeeReportTest {
         EmployeeReport report = new EmployeeReport();
         assertEquals("id,name,age,department", report.getSelect().trim());
     }
+
+    @Test
+    void getColumnName() {
+        EmployeeReport report = new EmployeeReport();
+        assertEquals("Employee name",report.getColumnName("NAME"));
+        assertEquals("UNKNOWN",report.getColumnName("UNKNOWN"));
+    }
 }
