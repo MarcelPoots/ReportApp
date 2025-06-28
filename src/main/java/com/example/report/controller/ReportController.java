@@ -35,10 +35,7 @@ public class ReportController {
                              @RequestParam(name = "department", required = false) String department) {
         Report report = new EmployeeReport();
 
-        String sql = "SELECT " + report.getSelect() + " FROM " + report.getTableName();
-        if (department != null && !department.isEmpty() && sql.toLowerCase().contains("department")) {
-            sql += " WHERE department = ?";
-        }
+        String sql = getSql(report, department);
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -69,6 +66,14 @@ public class ReportController {
         return "report";
     }
 
+    private static String getSql(Report report, String department) {
+        String sql = "SELECT " + report.getSelect() + " FROM " + report.getTableName();
+        if (department != null && !department.isEmpty() && sql.toLowerCase().contains("department")) {
+            sql += " WHERE department = ?";
+        }
+        return sql;
+    }
+
     @GetMapping("/report/export")
     public void exportCsv(@RequestParam(name = "department", required = false) String department,
                           HttpServletResponse response) throws IOException {
@@ -76,15 +81,12 @@ public class ReportController {
         response.setHeader("Content-Disposition", "attachment; filename=report.csv");
         Report report = new EmployeeReport();
 
-        String sql = "SELECT " + report.getSelect() + " FROM " + report.getTableName();
-        if (department != null && !department.isEmpty() && sql.toLowerCase().contains("department")) {
-            sql += " WHERE department = ?";
-        }
-        try (
-                Connection conn = dataSource.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql);
-        ) {
+        String sql = getSql(report, department);
 
+        try (
+            Connection conn = dataSource.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
             if (department != null && !department.isEmpty()) {
                 stmt.setString(1, department);
             }
